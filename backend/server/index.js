@@ -8,6 +8,7 @@ const {
   getUserPurchase,
   createPurchase,
   decreaseStock,
+  getUserPurchaseStatus,
 } = require('./db');
 require('dotenv').config();
 
@@ -110,8 +111,6 @@ app.post('/api/sale/purchase', async (req, res) => {
 
     await client.query('COMMIT');
 
-    client.release();
-
     res.json({
       success: true,
       purchasedAt: purchase.created_at
@@ -125,6 +124,28 @@ app.post('/api/sale/purchase', async (req, res) => {
     client.release();
   }
 });
+
+app.get('/api/sale/purchase/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const purchase = await getUserPurchaseStatus(userId, 1);
+    
+    if (purchase) {
+      res.json({
+        purchased: true,
+        at: purchase.created_at
+      });
+    } else {
+      res.json({
+        purchased: false
+      });
+    }
+  } catch (error) {
+    console.error('Error fetching purchase status:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT} with hot reload!`);

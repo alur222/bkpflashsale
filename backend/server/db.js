@@ -35,6 +35,12 @@ async function decreaseStock(client, itemId) {
   await client.query(query, [itemId]);
 }
 
+async function getUserPurchaseStatus(userId, itemId) {
+  const query = 'SELECT created_at FROM purchases WHERE user_id = $1 AND item_id = $2';
+  const result = await pool.query(query, [userId, itemId]);
+  return result.rows[0] || null;
+}
+
 module.exports = {
   pool,
   getSaleData,
@@ -42,4 +48,5 @@ module.exports = {
   getUserPurchase,
   createPurchase,
   decreaseStock,
+  getUserPurchaseStatus
 };
