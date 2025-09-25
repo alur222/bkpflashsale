@@ -18,6 +18,12 @@ async function getInventoryForUpdate(client, itemId) {
   return result.rows[0] || null;
 }
 
+async function getUserPurchase(client, userId, itemId) {
+  const query = 'SELECT id, created_at FROM purchases WHERE user_id = $1 AND item_id = $2';
+  const result = await client.query(query, [userId, itemId]);
+  return result.rows[0] || null;
+}
+
 async function createPurchase(client, userId, itemId) {
   const query = 'INSERT INTO purchases (user_id, item_id) VALUES ($1, $2) RETURNING id, created_at';
   const result = await client.query(query, [userId, itemId]);
@@ -33,6 +39,7 @@ module.exports = {
   pool,
   getSaleData,
   getInventoryForUpdate,
+  getUserPurchase,
   createPurchase,
   decreaseStock,
 };

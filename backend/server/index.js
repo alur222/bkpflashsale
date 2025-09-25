@@ -5,6 +5,7 @@ const {
   pool,
   getSaleData,
   getInventoryForUpdate,
+  getUserPurchase,
   createPurchase,
   decreaseStock,
 } = require('./db');
@@ -14,7 +15,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(morgan('combined'));
+// app.use(morgan('combined'));
 app.use(express.json());
 
 function computeStatus(now, startsAt, endsAt, stockLeft) {
@@ -84,6 +85,26 @@ app.post('/api/sale/purchase', async (req, res) => {
       return res.status(404).json({ error: 'Item not found' });
     }
 
+    const { stock_left, starts_at, ends_at } = inventory;
+    const now = new Date();
+    const status = computeStatus(now, starts_at, ends_at, stock_left);
+
+    if (status !== 'active') {
+      await client.query('ROLLBACK');
+      return res.status(403).json({ code: 'SALE_NOT_ACTIVE' });
+    }
+
+    const existingPurchase = await getUserPurchase(client, userId, 1);
+    if (existingPurchase) {
+      await client.query('ROLLBACK');
+      return res.status(409).json({ code: 'ALREADY_PURCHASED' });
+    }
+
+    if (stock_left <= 0) {
+      await client.query('ROLLBACK');
+      return res.status(409).json({ code: 'SOLD_OUT' });
+    }
+
     const purchase = await createPurchase(client, userId, 1);
     await decreaseStock(client, 1);
 
@@ -100,6 +121,8 @@ app.post('/api/sale/purchase', async (req, res) => {
     await client.query('ROLLBACK');
     console.error('Error processing purchase:', error);
     res.status(500).json({ error: 'Internal server error' });
+  } finally {
+    client.release();
   }
 });
 
