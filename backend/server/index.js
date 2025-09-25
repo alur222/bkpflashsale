@@ -35,7 +35,7 @@ app.get('/health', (req, res) => {
   res.json({ ok: true });
 });
 
-app.get('/api/v1/sale/status', async (req, res) => {
+app.get('/api/sale/status', async (req, res) => {
   try {
     const saleData = await getSaleData();
     
