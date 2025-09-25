@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  backend:
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    environment:
+      NODE_ENV: development
+    command: npm run dev
+    # Override the build context to ensure dev dependencies are installed
+    build:
+      context: ./backend
+      dockerfile: Dockerfile

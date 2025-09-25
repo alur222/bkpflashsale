@@ -1,0 +1,15 @@
+node_modules/
+npm-debug.log*
+
+.env
+.env.local
+
+.dockerignore
+
+.DS_Store
+Thumbs.db
+
+*.log
+
+*.sqlite
+*.db

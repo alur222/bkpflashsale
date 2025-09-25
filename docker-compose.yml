@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: bkp-postgres
+    environment:
+      POSTGRES_DB: bkp_inventory
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+    networks:
+      - bkp-network
+
+  backend:
+    build: ./backend
+    container_name: bkp-backend
+    environment:
+      DATABASE_URL: postgresql://postgres:password@db:5432/bkp_inventory
+      PORT: 3000
+      NODE_ENV: development
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - bkp-network
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: npm start
+
+volumes:
+  postgres_data:
+
+networks:
+  bkp-network:
+    driver: bridge
