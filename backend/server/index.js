@@ -146,7 +146,10 @@ app.get('/api/sale/purchase/:userId', async (req, res) => {
   }
 });
 
+module.exports = app;
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT} with hot reload!`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT} with hot reload!`);
+  });
+}
