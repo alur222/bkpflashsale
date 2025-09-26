@@ -34,6 +34,17 @@ services:
       - /app/node_modules
     command: npm start
 
+  frontend:
+    build: ./frontend
+    container_name: bkp-frontend
+    ports:
+      - "5173:5173"
+    networks:
+      - bkp-network
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
 volumes:
   postgres_data:
 
