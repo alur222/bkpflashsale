@@ -42,12 +42,15 @@ function SaleStatus() {
       }
 
       const timeDiff = targetTime - now;
+      // console.log('timediff', timeDiff);
+      // console.log('targetTime', targetTime);
       
       if (timeDiff <= 0) {
         setTimeLeft('');
         return;
       }
 
+      // have to search for this from google. lol
       const hours = Math.floor(timeDiff / (1000 * 60 * 60));
       const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
