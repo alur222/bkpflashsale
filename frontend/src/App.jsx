@@ -1,3 +1,7 @@
+import SaleStatus from './components/SaleStatus.jsx'
+import BuyForm from './components/BuyForm.jsx'
+import MyPurchase from './components/MyPurchase.jsx'
+
 function App() {
   return (
     <div className="min-h-screen bg-gray-100 py-8">
@@ -10,6 +14,10 @@ function App() {
             Limited time offer - Don't miss out!
           </p>
         </div>
+
+        <SaleStatus />
+        <BuyForm />
+        <MyPurchase />
       </div>
     </div>
   )
