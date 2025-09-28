@@ -10,14 +10,20 @@ const {
   decreaseStock,
   getUserPurchaseStatus,
 } = require('./db');
+const {
+  globalRateLimit,
+  userPurchaseRateLimit,
+} = require('./middleware/rateLimit');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-// app.use(morgan('combined'));
+app.use(morgan('combined'));
 app.use(express.json());
+
+app.use(globalRateLimit);
 
 function computeStatus(now, startsAt, endsAt, stockLeft) {
   const currentTime = new Date(now);
@@ -68,7 +74,7 @@ app.get('/api/sale/status', async (req, res) => {
   }
 });
 
-app.post('/api/sale/purchase', async (req, res) => {
+app.post('/api/sale/purchase', userPurchaseRateLimit, async (req, res) => {
   const { userId } = req.body;
 
   if (!userId) {

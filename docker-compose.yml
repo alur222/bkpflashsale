@@ -21,18 +21,30 @@ services:
     container_name: bkp-backend
     environment:
       DATABASE_URL: postgresql://postgres:password@db:5432/bkp_inventory
+      REDIS_URL: redis://redis:6379
       PORT: 3000
       NODE_ENV: development
     ports:
       - "3000:3000"
     depends_on:
       - db
+      - redis
     networks:
       - bkp-network
     volumes:
       - ./backend:/app
       - /app/node_modules
     command: npm start
+
+  redis:
+    image: redis:7-alpine
+    container_name: bkp-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - bkp-network
+    volumes:
+      - redis_data:/data
 
   frontend:
     build: ./frontend
@@ -47,6 +59,7 @@ services:
 
 volumes:
   postgres_data:
+  redis_data:
 
 networks:
   bkp-network:
