@@ -16,10 +16,10 @@ function App() {
         </div>
 
         <div className="flex w-full gap-2 justify-center">
-          <div className="items-center w-1/3">
+          <div className="items-center w-2/3">
             <SaleStatus />
           </div>
-          <div className="flex-col w-1/3">
+          <div className="flex-col w-2/3">
             <BuyForm />
             <MyPurchase />
           </div>
