@@ -45,3 +45,8 @@ Test rate limiting and concurrent purchases:
 ```bash
 node scripts/stress.js
 ```
+
+## high level digram
+
+<img width="809" height="669" alt="image" src="https://github.com/user-attachments/assets/8e7dea15-c131-49ec-8222-d20f28738d4b" />
+
