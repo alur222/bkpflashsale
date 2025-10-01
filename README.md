@@ -31,13 +31,13 @@ Rate limits are shared across multiple backend instances. When exceeded, returns
 
 ## Testing
 
-### Unit Tests can be ran via docker script:
+### Unit Tests can be run via docker script:
 Run the test suite:
 ```bash
 docker exec bkp-backend npm test
 ```
 
-### Stress Testing can also be ran via node js
+### Stress Testing can also be rUn via node js
 - this will fire 500 concurrent requests with userIds that are random
 - this will report the number successful requests and error counts.
 
